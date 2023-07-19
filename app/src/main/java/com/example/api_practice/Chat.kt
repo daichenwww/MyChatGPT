@@ -85,7 +85,7 @@ fun UserInput(viewModel: ChatViewModel){
             ) },
             modifier = Modifier.weight(1f),
             keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Ascii,
+                keyboardType = KeyboardType.Text,
                 imeAction = ImeAction.Send
             ),
             keyboardActions = KeyboardActions(
