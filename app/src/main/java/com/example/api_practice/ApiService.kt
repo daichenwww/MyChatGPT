@@ -3,10 +3,11 @@ package com.example.api_practice
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.Body
+import retrofit2.http.Header
 import retrofit2.http.Headers
 import retrofit2.http.POST
 
-private const val YOUR_API_KEY = ""
+const val YOUR_API_KEY = ""
 object ApiService {
     private const val BASE_URL = "https://api.openai.com/"
     private val retrofit = Retrofit.Builder()
@@ -18,9 +19,13 @@ object ApiService {
 }
 
 interface OpenAIApi {
-    @Headers("Content-Type: application/json", "Authorization: Bearer $YOUR_API_KEY")
+    @Headers("Content-Type: application/json")
+
+
+    @POST("v1/images/generations")
+    suspend fun generateImage(@Header("Authorization") authHeader: String, @Body requestBody: ImgRequest): ImgResponse
     @POST("v1/chat/completions")
-    suspend fun generateResponse(@Body requestBody: Request): Response
+    suspend fun generateResponse(@Header("Authorization") authHeader: String, @Body requestBody: Request): Response
 }
 
 data class Request(
@@ -31,9 +36,19 @@ data class Request(
 )
 
 data class Response(
-    val choices: List<ResponseMessage>
+    val choices: List<Choice>
 )
 
-data class ResponseMessage(
+data class Choice(
     val message: Message
+)
+
+data class ImgRequest(
+    val prompt: String,
+    val n: Int = 1,
+    val size: String = "1024x1024"
+)
+
+data class ImgResponse(
+    val data: List<ImgMessage>
 )

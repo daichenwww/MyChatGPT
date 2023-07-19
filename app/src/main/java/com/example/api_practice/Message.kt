@@ -11,6 +11,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import com.example.api_practice.ui.theme.Pink80
 import com.example.api_practice.ui.theme.Purple80
 import com.example.api_practice.ui.theme.PurpleGrey40
@@ -39,4 +40,38 @@ fun ChatMessageItem(message: Message) {
     }
 }
 
-data class Message(val content: String, val role: String)
+@Composable
+fun ImgMessageItem(message: ImgMessage) {
+    Row(
+        modifier = Modifier
+            .padding(8.dp)
+            .background(if(message.url.startsWith("https://")) Pink80 else Purple80)
+
+    ) {
+        Text(
+            text = if (message.url.startsWith("https://")) "助理: " else "You:",
+            Modifier.padding(8.dp),
+            style = MaterialTheme.typography.bodyLarge,
+            color = PurpleGrey40
+        )
+        if (message.url.startsWith("https://")) {
+            AsyncImage(
+                model = message.url,
+                contentDescription = null,
+                modifier = Modifier.padding(8.dp)
+            )
+        }
+        else {
+            Text(
+                text = message.url,
+                Modifier.padding(8.dp),
+                style = MaterialTheme.typography.bodyLarge,
+                color = Color.Black
+            )
+        }
+
+    }
+}
+
+data class Message(val role: String, val content: String)
+data class ImgMessage(val url: String)
